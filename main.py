@@ -7,6 +7,7 @@ Created on Sat Feb 20 15:33:32 2021
 
 
 from BlockchainClass import BlockChain
+from BlockClass import Block
 
 
 def main():
