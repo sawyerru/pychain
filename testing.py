@@ -23,6 +23,8 @@ def test_blockchain_creation():
     assert blockchain.genesis_block.hash is not None
     
     
+def test_add_transaction():
+    assert True
     
     
     
