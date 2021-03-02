@@ -46,9 +46,12 @@ class Blockchain(object):
         return block
     
     def display(self):
+        width = 120
         block = self.genesis_block
-        while block._next_block is not None:
+        while block is not None:
             block.display()
-            print('\t\t-0-\t\t')
+            print(' '*int(width/2 - 1) + '0' + ' '*int(width/2 - 1))
+            print(' '*int(width/2 - 2) + '( )' + ' '*int(width/2 - 2))
+            print(' '*int(width/2 - 1) + '0' + ' '*int(width/2 - 1))
             block = block._next_block
         

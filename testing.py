@@ -28,5 +28,5 @@ def test_blockchain_creation():
     
 if __name__ == '__main__':
     # Run all Test functions
-    # examples()
-    # test_blockchain_creation()
+    examples()
+    test_blockchain_creation()

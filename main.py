@@ -29,33 +29,49 @@ def main():
       
         print('\n\nMENU:---------------------------------')
         print("\t '.' - exit the program")
-        print("\t 'T' - Create a new transaction")
+        print("\t 'T/t' - Create a new transaction")
         print("\t 'mine' - mine the current block")
         print("\t 'chain' - display the entire chain")
         print("\t 'block' - display the current block")
+        print("\t 'V/v' - check blockchain is valid")
         print('--------------------------------------')
-        option = input('Please select a menu option: ').strip()
+        option = input('Please select a menu option: ').strip().lower()
         
         if option == '.':
             print('*Exiting the Blockchain*')
             break
-        elif option == 'T': 
+        elif option == 't': 
             transaction_object = create_transaction()
-            current_block.add_transaction(transaction_object)          
+            try: 
+                current_block.add_transaction(transaction_object)   
+            except Exception as err:
+                print(err)
+        
         elif option == 'mine':
             # Mine current block and add to ledger
-            current_block.mine()
-            blockchain.append_block(current_block)
+            try:
+                result = current_block.mine()
+                print(result)
+               
+                blockchain.append_block(current_block)
             
-            # adjust pointer and state of chain
-            prev_block._next_block = current_block
-            prev_block = current_block
-            current_block = Block(index=blockchain.current_length + 1, previous_hash=prev_block.hash)
+                # adjust pointers and state of chain
+                prev_block._next_block = current_block
+                prev_block = current_block
+                current_block = Block(index=blockchain.current_length + 1, previous_hash=prev_block.hash)
+            except Exception as err:
+                print(err)
+            
             
         elif option == 'chain':
             blockchain.display()
         elif option == 'block':
             current_block.display()
+            
+        elif option == 'v':
+            result = blockchain.check_validity()
+            print(result)
+            
         else:
             print('Invalid Argument: ', option, '\n please try again')
         
