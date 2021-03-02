@@ -7,6 +7,7 @@ looking up Linked Lists and do some reading.)
 '''
 
 from BlockClass import Block
+import hashlib
 
 class Blockchain(object): 
     '''
@@ -40,8 +41,17 @@ class Blockchain(object):
         while block._next_block is not None:
             if block._next_block.previous_hash != block.hash:
                 return False
+            h = self.calc_hash(block.index, block.timestamp, block.previous_hash, block.merkle_root)
+            if h != block.hash:
+                return False
+            
             block= block._next_block
         return True
+    
+    @staticmethod
+    def calc_hash(index, timestamp, prev_hash, merkle_root):
+        block_string = "{}{}{}{}".format(index, timestamp, prev_hash, merkle_root )  
+        return hashlib.sha256(block_string.encode()).hexdigest()
      
     def get_last_block(self):
         ''' Get the last block instance in the chain and return that Object. '''

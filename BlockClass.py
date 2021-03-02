@@ -36,17 +36,20 @@ class Block(object):
         ''' Mine the block given the current data. Use Proof function and hash block data to finalize block
         '''
         # Raise error if some information is missing
-        if self.index is None or self.previous_hash is None or self.merkle_root is '':
+        if self.index is None or self.previous_hash is None or self.merkle_root == '':
             raise Exception('Cannot mine - block header information not complete')
         
         # Do Proof
         
         
         # Finalize hash
-        block_string = "{}{}{}{}".format(self.index,  self.timestamp, self.previous_hash, self.merkle_root )  
-        self.hash = hashlib.sha256(block_string.encode()).hexdigest()
+        self.hash = self.calc_hash(self.index, self.timestamp, self.previous_hash, self.merkle_root)
         return 'Block {} Mined! New Hash = {}'.format(self.index, self.hash)
-        
+    
+    @staticmethod
+    def calc_hash(index, timestamp, prev_hash, merkle_root):
+        block_string = "{}{}{}{}".format(index,  timestamp, prev_hash, merkle_root )  
+        return hashlib.sha256(block_string.encode()).hexdigest()
     
     def add_transaction(self, transaction):
         ''' Add Transaction to block
@@ -74,10 +77,15 @@ class Block(object):
         str4_blank = width - (len(str(self.merkle_root)) + len(str(self._block_size)) + 14 + 13)
         str4 = '| Merkle Root: {mr:}'.format(mr=self.merkle_root) + ' '*str4_blank + 'Rem. Space: {s:} |'.format(s=self._block_size)
         
-        transactions = 
         str5 = "|" + "-"*width + "|"
         
-        return str1 + '\n' + str2 + '\n' + str3 + '\n' + str4 + '\n' + str5
+        S = str1 + '\n' + str2 + '\n' + str3 + '\n' + str4 + '\n'
+        
+        for t in self._transactions:
+            blanks = width - (len(t) + 7)
+            s = "| ----> {}".format(t) + ' '*blanks +'|\n'
+            S += s
+        return S + str5
 
     def display(self):
         ''' Special Printing function to utilize __repr__. Do NOT Change.'''
