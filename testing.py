@@ -22,6 +22,14 @@ def test_blockchain_creation():
     blockchain = Blockchain()
     assert blockchain.genesis_block.hash is not None
     
+def test_transaction_add():
+    pass
+
+def test_block_append():
+    pass
+
+def test_
+    
     
     
     
