@@ -4,6 +4,8 @@ within a blockchain
 '''
 from datetime import datetime  
 import hashlib  
+import random
+import time
   
   
 class Block(object):  
@@ -40,12 +42,29 @@ class Block(object):
             raise Exception('Cannot mine - block header information not complete')
         
         # Do Proof
-        
-        
-        # Finalize hash
-        self.hash = self.calc_hash(self.index, self.timestamp, self.previous_hash, self.merkle_root)
-        return 'Block {} Mined! New Hash = {}'.format(self.index, self.hash)
+        if self.do_proof():    
+            # Finalize hash
+            self.hash = self.calc_hash(self.index, self.timestamp, self.previous_hash, self.merkle_root)
+            return 'Block {} Mined! New Hash = {}'.format(self.index, self.hash)
+        else:
+            raise Exception('Cannot mine - proof not found')
     
+    @staticmethod
+    def do_proof():
+        attempts = 0
+        p = int(random.random() * 100) # random.random() returns a number between 0.0 and 1.0 -> we want to make it an int in the 100s
+        a = random.randint(2, p-1)
+        
+        # use fermat's little theroem to determine if p is prime
+        while (a**p) % p != a % p and attempts >= 10: # p is not prime, try again
+            print('MINING ATTEMPT: ', attempts, end='', flush=True)
+            p = int(random.random() * 100) # random.random() returns a number between 0.0 and 1.0 -> we want to make it an int in the 100s
+            a = random.randint(2, p-1)
+            attempts += 1
+            time.sleep(1)
+        
+        return True if attempts < 10 else False # no prime number found in max attempts
+        
     @staticmethod # 'static method' decorator describes a function that does not use or change any member variables
     def calc_hash(index, timestamp, prev_hash, merkle_root):
         block_string = "{}{}{}{}".format(index,  timestamp, prev_hash, merkle_root )  
