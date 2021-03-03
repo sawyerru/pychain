@@ -48,7 +48,7 @@ class Blockchain(object):
             block= block._next_block
         return True
     
-    @staticmethod
+    @staticmethod # 'static method' decorator describes a function that does not use or change any member variables
     def calc_hash(index, timestamp, prev_hash, merkle_root):
         block_string = "{}{}{}{}".format(index, timestamp, prev_hash, merkle_root )  
         return hashlib.sha256(block_string.encode()).hexdigest()

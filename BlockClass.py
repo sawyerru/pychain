@@ -46,7 +46,7 @@ class Block(object):
         self.hash = self.calc_hash(self.index, self.timestamp, self.previous_hash, self.merkle_root)
         return 'Block {} Mined! New Hash = {}'.format(self.index, self.hash)
     
-    @staticmethod
+    @staticmethod # 'static method' decorator describes a function that does not use or change any member variables
     def calc_hash(index, timestamp, prev_hash, merkle_root):
         block_string = "{}{}{}{}".format(index,  timestamp, prev_hash, merkle_root )  
         return hashlib.sha256(block_string.encode()).hexdigest()
