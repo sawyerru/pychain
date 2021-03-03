@@ -7,11 +7,15 @@ looking up Linked Lists and do some reading.)
 '''
 
 from BlockClass import Block
+import hashlib
 
-class Blockchain(object):  
+class Blockchain(object): 
+    '''
+    Blockchain Object to link Block Objects and handle state information and access
+    '''
       
     def __init__(self):  
-        # Member Variables (attributes about the blockchain object that may be useful)
+        # Instance Attributes (attributes about the blockchain object that may be useful)
         self.genesis_block = self._create_genesis_block()
         self.current_length = 0
         self.nonce = 0        
@@ -32,20 +36,32 @@ class Blockchain(object):
         self.current_length += 1
         
     def check_validity(self):
+        ''' Check that the blockchain structure has not been compromised.'''
         block = self.genesis_block
         while block._next_block is not None:
             if block._next_block.previous_hash != block.hash:
                 return False
+            h = self.calc_hash(block.index, block.timestamp, block.previous_hash, block.merkle_root)
+            if h != block.hash:
+                return False
+            
             block= block._next_block
         return True
+    
+    @staticmethod # 'static method' decorator describes a function that does not use or change any member variables
+    def calc_hash(index, timestamp, prev_hash, merkle_root):
+        block_string = "{}{}{}{}".format(index, timestamp, prev_hash, merkle_root )  
+        return hashlib.sha256(block_string.encode()).hexdigest()
      
     def get_last_block(self):
+        ''' Get the last block instance in the chain and return that Object. '''
         block = self.genesis_block
         while block._next_block is not None:
             block = block._next_block
         return block
     
     def display(self):
+        ''' Special printing function to view entire chain and blocks. Do NOT edit. '''
         width = 120
         block = self.genesis_block
         while block is not None:

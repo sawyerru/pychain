@@ -1,3 +1,8 @@
+'''
+Main.py - driver file to be ran as main user interaction. This will handle the
+interaction in the form of a menu option and do various tasks based on the selection.
+This file also handles the state and maintenance of the blockchain.
+'''
 from BlockchainClass import Blockchain
 from BlockClass import Block
 
@@ -5,6 +10,9 @@ import hashlib
 
 
 def create_transaction():
+    ''' Create the transaction object and handle inputs into the object.
+        returns: dictionary of transaction object
+    '''
     transaction_object = {'to': None, 'from': None, 'amt': None}
     transaction_object['to'] = input('To? ').strip()
     transaction_object['from'] = input('From? ').strip()
@@ -21,7 +29,7 @@ def main():
     blockchain = Blockchain()
     
     # State information is outside user interface loop
-    current_block = Block(index=blockchain.current_length+1, previous_hash=blockchain.genesis_block.hash)
+    current_block = Block(index=blockchain.current_length + 1, previous_hash=blockchain.genesis_block.hash)
     prev_block = blockchain.get_last_block()
 
     # User interface loop operates until they're finished
@@ -37,6 +45,7 @@ def main():
         print('--------------------------------------')
         option = input('Please select a menu option: ').strip().lower()
         
+        # Handle each case
         if option == '.':
             print('*Exiting the Blockchain*')
             break
